@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<title>Append</title>
+	</head>
+	<body>
+		<% if(messages.error) { %>
+			<%= messages.error %>
+		<% } %>
+		<form action="/append" method="POST">
+			<p>Title <input name="title" required/></p>
+			<p>url <input name="url" required/></p>
+			<input type="hidden" value="<%= csrfToken %>" name="_csrf"/>
+			<button type="submit">Submit</button>
+		</form>
+	</body>
+</html>

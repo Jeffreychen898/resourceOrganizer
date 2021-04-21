@@ -4,13 +4,13 @@ const emailValidator = require("email-validator");
 
 const mongooseModels = require("./MongoModels");
 
-async function authenticateUser(mail, password, done) {
-	if(emailValidator.validate(mail)) {
+async function authenticateUser(email, password, done) {
+	if(emailValidator.validate(email)) {
 		try {
-			const user = await mongooseModels.users.find({ email: mail }).limit(1);
-			if(user.length > 0) {
-				if(await bcrypt.compare(password, user[0].password)) {
-					return done(null, user[0]);
+			const user = await mongooseModels.users.findOne({ email: email });
+			if(user != null) {
+				if(await bcrypt.compare(password, user.password)) {
+					return done(null, user);
 				} else {
 					return done(null, false, { message: "invalid password" });
 				}
@@ -32,8 +32,8 @@ function initialize(passport, getUserByID) {
 	});
 	passport.deserializeUser(async (id, done) => {
 		try {
-			const user = await mongooseModels.users.find({ id: id }).limit(1);
-			done(null, user[0]);
+			const user = await mongooseModels.users.findOne({ id: id });
+			done(null, user);
 		} catch(error) {
 			done(error);
 		}
