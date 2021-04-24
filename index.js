@@ -2,6 +2,7 @@
 require("dotenv").config();
 const express = require("express");
 const app = express();
+const { v4: uuidv4 } = require("uuid");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const passport = require("passport");
@@ -77,6 +78,15 @@ app.get("/manage/:page", checkAuthenticated, async (req, res) => {
 });
 
 // post
+app.post("/manage/remove", checkAuthenticated, async (req, res) => {
+	try {
+		await MongoModels.items.deleteOne({ id: req.body.id });
+
+		res.send("success");
+	} catch(error) {
+		res.send("error");
+	}
+});
 app.post("/manage", checkAuthenticated, (req, res, next) => {
 	if(req.body.title && req.body.url) {
 		next();
@@ -89,6 +99,7 @@ app.post("/manage", checkAuthenticated, (req, res, next) => {
 		const title = req.body.title;
 		const filtered_title = helper.titleFilter(title);
 		const insert = new MongoModels.items({
+			id: uuidv4(),
 			title: title,
 			filtered_title: filtered_title,
 			url: req.body.url,

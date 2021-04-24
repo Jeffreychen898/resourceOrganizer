@@ -25,6 +25,10 @@ const Users = mongoose.model("Users", UsersSchema);
 
 // items
 const ItemsSchema = new Schema({
+	id: {
+		type: String,
+		required: true
+	},
 	title: {
 		type: String,
 		required: true
