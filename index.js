@@ -64,19 +64,25 @@ app.get("/register", checkNotAuthenticated, (req, res) => {
 	res.render("pages/register.ejs", { csrfToken: req.csrfToken() });
 });
 app.get("/manage", checkAuthenticated, (req, res) => {
-	res.render("manage items");
+	//res.render("pages/manage.ejs", { csrfToken: req.csrfToken() });
+	res.redirect("manage/1");
 });
-app.get("/append", checkAuthenticated, (req, res) => {
-	res.render("pages/append.ejs", { csrfToken: req.csrfToken() });
+app.get("/manage/:page", checkAuthenticated, async (req, res) => {
+	try {
+		const result_list = await MongoModels.items.find({ user_id: req.user.id });
+		res.render("pages/manage.ejs", { csrfToken: req.csrfToken(), items: result_list });
+	} catch(error) {
+		res.send("an unexpected error has occured");
+	}
 });
 
 // post
-app.post("/append", checkAuthenticated, (req, res, next) => {
+app.post("/manage", checkAuthenticated, (req, res, next) => {
 	if(req.body.title && req.body.url) {
 		next();
 	} else {
 		req.flash("error", "Required parameters must be filled");
-		res.redirect("/append");
+		res.redirect("/manage/1");
 	}
 }, async (req, res) => {
 	try {
@@ -90,10 +96,10 @@ app.post("/append", checkAuthenticated, (req, res, next) => {
 		});
 		await insert.save();
 
-		res.redirect("/append");
+		res.redirect("/manage/1");
 	} catch {
 		req.flash("error", "an unexpected error has occured");
-		res.redirect("/append");
+		res.redirect("/manage/1");
 	}
 });
 
