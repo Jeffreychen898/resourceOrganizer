@@ -4,6 +4,10 @@
 		<title>Search</title>
 	</head>
 	<body>
+		<form method="GET">
+			<input name="q"/>
+			<button>Submit</button>
+		</form>
 		<h1><%= user %></h1>
 		<% for(let item of results) { %>
 			<h1><%= item.title %></h1>
