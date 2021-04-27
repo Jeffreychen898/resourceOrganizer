@@ -17,6 +17,7 @@ const helper = require("./src/helper");
 const initializePassport = require("./src/PassportConfig");
 const register = require("./src/register");
 const MongoModels = require("./src/MongoModels");
+const search = require("./src/search");
 
 const PORT = process.env.PORT || 8080;
 
@@ -47,9 +48,26 @@ app.use(session({
 }));
 app.use(passport.initialize());
 app.use(passport.session());
-app.use(csurfErrorHandling);
 
 // routes
+//routes not protected by csrf
+
+app.get("/search/:user", (req, res, next) => {
+	let search_query = req.query.q;
+	if(search_query) {
+		search_query.trim();
+	}
+
+	if(search_query && search_query != "") {
+		return next();
+	}
+
+	res.render("pages/search.ejs");
+
+}, search);
+
+app.use(csurfErrorHandling);
+
 // get
 app.get("/", checkAuthenticated, (req, res) => {
 	//global search
@@ -73,18 +91,6 @@ app.get("/manage/:page", checkAuthenticated, async (req, res) => {
 		res.render("pages/manage.ejs", { csrfToken: req.csrfToken(), items: result_list });
 	} catch(error) {
 		res.send("an unexpected error has occured");
-	}
-});
-app.get("/search/:user", (req, res) => {
-	let search_query = req.query.q;
-	if(search_query) {
-		search_query.trim();
-	}
-
-	if(!search_query || search_query == "") {
-		res.render("pages/search.ejs");
-	} else {
-		res.render("pages/search_result.ejs", { query: search_query });
 	}
 });
 
