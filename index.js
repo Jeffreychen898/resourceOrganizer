@@ -65,7 +65,6 @@ app.get("/register", checkNotAuthenticated, (req, res) => {
 	res.render("pages/register.ejs", { csrfToken: req.csrfToken() });
 });
 app.get("/manage", checkAuthenticated, (req, res) => {
-	//res.render("pages/manage.ejs", { csrfToken: req.csrfToken() });
 	res.redirect("manage/1");
 });
 app.get("/manage/:page", checkAuthenticated, async (req, res) => {
@@ -74,6 +73,18 @@ app.get("/manage/:page", checkAuthenticated, async (req, res) => {
 		res.render("pages/manage.ejs", { csrfToken: req.csrfToken(), items: result_list });
 	} catch(error) {
 		res.send("an unexpected error has occured");
+	}
+});
+app.get("/search/:user", (req, res) => {
+	let search_query = req.query.q;
+	if(search_query) {
+		search_query.trim();
+	}
+
+	if(!search_query || search_query == "") {
+		res.render("pages/search.ejs");
+	} else {
+		res.render("pages/search_result.ejs", { query: search_query });
 	}
 });
 
