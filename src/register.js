@@ -3,6 +3,7 @@ const emailValidator = require("email-validator");
 const bcrypt = require("bcrypt");
 
 const mongooseModels = require("./MongoModels");
+const helper = require("./helper");
 
 async function storeUser(name, email, password, done) {
 	try {
@@ -10,6 +11,7 @@ async function storeUser(name, email, password, done) {
 		const register = new mongooseModels.users({
 			id: uuidv4(),
 			name: name,
+			condensed_name: helper.titleFilter(name),
 			email: email,
 			password: hashed_password
 		});

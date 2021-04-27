@@ -11,6 +11,10 @@ const UsersSchema = new Schema({
 		type: String,
 		required: true
 	},
+	condensed_name: {
+		type: String,
+		required: true
+	},
 	email: {
 		type: String,
 		required: true
