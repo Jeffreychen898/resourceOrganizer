@@ -42,6 +42,15 @@ async function registerUser(req, res) {
 			return;
 		}
 
+		//check if the name already exist
+		const condensed_display_name = helper.titleFilter(name);
+		const existingName = await mongooseModels.users.findOne({ condensed_name: condensed_display_name });
+		if(existingName != null) {
+			req.flash("error", "the display name is already in use");
+			res.redirect("/register");
+			return;
+		}
+
 		//check if the user already exist
 		const existingUser = await mongooseModels.users.findOne({ email: email });
 		if(existingUser != null) {
