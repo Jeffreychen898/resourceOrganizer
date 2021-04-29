@@ -1,3 +1,3 @@
-instead of using name, use id for the search
+only allow 1 person to use the same name
 design the frontend
 allow user to create different groups
