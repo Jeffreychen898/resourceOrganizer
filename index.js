@@ -57,9 +57,13 @@ app.get("/search/:user", async (req, res, next) => {
 		if(find_user) {
 			return next();
 		}
-		res.send("cannot find user");
+		res.render("pages/error.ejs", {
+			error: "cannot find user"
+		});
 	} catch(error) {
-		res.send("an unexpected error has occured");
+		res.render("pages/error.ejs", {
+			error: "an unexpected error has occured"
+		});
 	}
 }, (req, res, next) => {
 	let search_query = req.query.q;
@@ -99,16 +103,21 @@ app.get("/manage/:page", checkAuthenticated, async (req, res) => {
 		const result_list = await MongoModels.items.find({ user_id: req.user.id });
 		res.render("pages/manage.ejs", { csrfToken: req.csrfToken(), items: result_list });
 	} catch(error) {
-		res.send("an unexpected error has occured");
+		res.render("pages/error.ejs", {
+			error: "an unexpected error has occured"
+		});
 	}
 });
 
 // post
 app.post("/manage/remove", checkAuthenticated, async (req, res) => {
 	try {
-		await MongoModels.items.deleteOne({ id: req.body.id });
-
-		res.send("success");
+		if(req.body.id) {
+			await MongoModels.items.deleteOne({ id: req.body.id });
+			res.send("success");
+		} else {
+			res.send("error");
+		}
 	} catch(error) {
 		res.send("error");
 	}
@@ -182,7 +191,9 @@ function checkAuthenticated(req, res, next) {
 function csurfErrorHandling(req, res, next) {
 	csrfProtection(req, res, (err) => {
 		if(err) {
-			res.send("invalid token");
+			res.render("pages/error.ejs", {
+				error: "invalid/missing csrf token"
+			});
 		} else {
 			next();
 		}

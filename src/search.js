@@ -13,8 +13,9 @@ async function searchItem(req, res) {
 		});
 
 	} catch(error) {
-		console.log(error);
-		res.send("an error has occured");
+		res.render("pages/error.ejs", {
+			error: "an unexpected error has occured"
+		});
 	}
 }
 
