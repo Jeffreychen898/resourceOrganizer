@@ -10,7 +10,6 @@ const flash = require("express-flash");
 const session = require("express-session");
 const csurf = require("csurf");
 const csrfProtection = csurf();
-
 const emailValidator = require("email-validator");
 
 const helper = require("./src/helper");

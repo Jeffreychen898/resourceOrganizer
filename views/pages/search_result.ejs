@@ -9,8 +9,12 @@
 			<button>Submit</button>
 		</form>
 		<h1><%= user %></h1>
-		<% for(let item of results) { %>
-			<h1><%= item.title %></h1>
+		<% if(results.length == 0) { %>
+			<h3>No results can be found</h3>
+		<% } else { %>
+			<% for(let item of results) { %>
+				<h1><%= item.title %></h1>
+			<% } %>
 		<% } %>
 	</body>
 </html>
