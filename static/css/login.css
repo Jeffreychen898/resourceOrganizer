@@ -1,0 +1,56 @@
+form {
+	margin: auto;
+	margin-top: 30px;
+	width: 400px;
+}
+
+form fieldset {
+	border: 2px solid #9F05CE;
+}
+
+form .error-message {
+	font-size: 15px;
+	text-align: center;
+	color: red;
+}
+
+form .form-legend {
+	margin-left: 20px;
+	padding: 0 5px;
+	color: #9F05CE;
+}
+
+form .form-content {
+	margin: auto;
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+form .form-data {
+	width: 70%;
+	height: 20px;
+	display: block;
+	outline: none;
+	border: 2px solid #9F05CE;
+	border-radius: 10px;
+	padding: 5px 10px;
+}
+form .form-submit {
+	width: 100px;
+	height: 30px;
+	display: block;
+	border-radius: 15px;
+	border: 2px solid #9F05CE;
+	background-color: #FFFFFF00;
+	color: #9F05CE;
+	transition: all 0.3s ease;
+}
+form .form-submit:hover {
+	background-color: #9F05CE;
+	color: white;
+}
+
+form .link a {
+	margin-left: 15%;
+	text-decoration: none;
+	color: #9F05CE;
+}

@@ -1,13 +1,13 @@
 <header>
 	<h1 class="header-display">
-		<a href="#">Res/Organizer</a>
+		<a href="/">Res/Organizer</a>
 	</h1>
 	<ul class="header-nav-container">
 		<% if(login) { %>
-			<li><a href="#">Manage</a></li>
+			<li><a href="/manage">Manage</a></li>
 		<% } else { %>
-			<li><a href="#">Login</a></li>
-			<li><a href="#">Register</a></li>
+			<li><a href="/login">Login</a></li>
+			<li><a href="/register">Register</a></li>
 		<% } %>
 	</ul>
 </header>
