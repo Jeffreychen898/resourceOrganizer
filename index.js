@@ -52,7 +52,17 @@ app.use(passport.session());
 // routes
 //routes not protected by csrf
 
-app.get("/search/:user", (req, res, next) => {
+app.get("/search/:user", async (req, res, next) => {
+	try {
+		const find_user = await MongoModels.users.findOne({ condensed_name: req.params.user });
+		if(find_user) {
+			return next();
+		}
+		res.send("cannot find user");
+	} catch(error) {
+		res.send("an unexpected error has occured");
+	}
+}, (req, res, next) => {
 	let search_query = req.query.q;
 	if(search_query) {
 		search_query.trim();
