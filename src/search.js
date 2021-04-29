@@ -14,7 +14,7 @@ async function searchItem(req, res) {
 
 	} catch(error) {
 		res.render("pages/error.ejs", {
-			error: "an unexpected error has occured"
+			error: "An unexpected error has occurred!"
 		});
 	}
 }

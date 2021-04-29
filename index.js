@@ -58,11 +58,13 @@ app.get("/search/:user", async (req, res, next) => {
 			return next();
 		}
 		res.render("pages/error.ejs", {
-			error: "cannot find user"
+			error: "User cannot be found!",
+			login: req.isAuthenticated()
 		});
 	} catch(error) {
 		res.render("pages/error.ejs", {
-			error: "an unexpected error has occured"
+			error: "An unexpected error has occurred!",
+			login: req.isAuthenticated()
 		});
 	}
 }, (req, res, next) => {
@@ -75,7 +77,9 @@ app.get("/search/:user", async (req, res, next) => {
 		return next();
 	}
 
-	res.render("pages/search.ejs");
+	res.render("pages/search.ejs", {
+		login: req.isAuthenticated()
+	});
 
 }, search);
 
@@ -90,10 +94,16 @@ app.get("/account", checkAuthenticated, (req, res) => {
 	res.send("account " + req.user);
 });
 app.get("/login", checkNotAuthenticated, (req, res) => {
-	res.render("pages/login.ejs", { csrfToken: req.csrfToken() });
+	res.render("pages/login.ejs", {
+		csrfToken: req.csrfToken(),
+		login: req.isAuthenticated()
+	});
 });
 app.get("/register", checkNotAuthenticated, (req, res) => {
-	res.render("pages/register.ejs", { csrfToken: req.csrfToken() });
+	res.render("pages/register.ejs", {
+		csrfToken: req.csrfToken(),
+		login: req.isAuthenticated()
+	});
 });
 app.get("/manage", checkAuthenticated, (req, res) => {
 	res.redirect("manage/1");
@@ -101,10 +111,15 @@ app.get("/manage", checkAuthenticated, (req, res) => {
 app.get("/manage/:page", checkAuthenticated, async (req, res) => {
 	try {
 		const result_list = await MongoModels.items.find({ user_id: req.user.id });
-		res.render("pages/manage.ejs", { csrfToken: req.csrfToken(), items: result_list });
+		res.render("pages/manage.ejs", {
+			csrfToken: req.csrfToken(),
+			items: result_list,
+			login: req.isAuthenticated()
+		});
 	} catch(error) {
 		res.render("pages/error.ejs", {
-			error: "an unexpected error has occured"
+			error: "An unexpected error has occurred!",
+			login: req.isAuthenticated()
 		});
 	}
 });
@@ -126,7 +141,7 @@ app.post("/manage", checkAuthenticated, (req, res, next) => {
 	if(req.body.title && req.body.url) {
 		next();
 	} else {
-		req.flash("error", "Required parameters must be filled");
+		req.flash("error", "Required parameters must be filled!");
 		res.redirect("/manage/1");
 	}
 }, async (req, res) => {
@@ -144,7 +159,7 @@ app.post("/manage", checkAuthenticated, (req, res, next) => {
 
 		res.redirect("/manage/1");
 	} catch {
-		req.flash("error", "an unexpected error has occured");
+		req.flash("error", "An unexpected error has occurred!");
 		res.redirect("/manage/1");
 	}
 });
@@ -153,7 +168,7 @@ app.post("/login", checkNotAuthenticated, (req, res, next) => {
 	if(req.body.email && req.body.password) {
 		next();
 	} else {
-		req.flash("error", "Required parameters must be filled");
+		req.flash("error", "Required parameters must be filled!");
 		res.redirect("/login");
 	}
 }, passport.authenticate("local", {
@@ -166,7 +181,7 @@ app.post("/register", checkNotAuthenticated, (req, res, next) => {
 	if(req.body.displayName && req.body.email && req.body.password) {
 		next();
 	} else {
-		req.flash("error", "Required parameters must be filled");
+		req.flash("error", "Required parameters must be filled!");
 		res.redirect("/register");
 	}
 }, register);
@@ -192,10 +207,14 @@ function csurfErrorHandling(req, res, next) {
 	csrfProtection(req, res, (err) => {
 		if(err) {
 			res.render("pages/error.ejs", {
-				error: "invalid/missing csrf token"
+				error: "Invalid/Missing CSRF token!",
+				login: req.isAuthenticated()
 			});
 		} else {
 			next();
 		}
 	})
 }
+
+//static
+app.use("/css", express.static("static/css"));

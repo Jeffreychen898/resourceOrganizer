@@ -12,16 +12,16 @@ async function authenticateUser(email, password, done) {
 				if(await bcrypt.compare(password, user.password)) {
 					return done(null, user);
 				} else {
-					return done(null, false, { message: "invalid password" });
+					return done(null, false, { message: "Incorrect Password!" });
 				}
 			} else {
-				done(null, false, { message: "No user with that email" });
+				done(null, false, { message: "User with the email does not exist!" });
 			}
 		} catch(error) {
 			done(error);
 		}
 	} else {
-		done(null, false, { message: "invalid email" });
+		done(null, false, { message: "The email is not valid!" });
 	}
 }
 

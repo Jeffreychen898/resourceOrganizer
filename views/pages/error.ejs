@@ -2,9 +2,17 @@
 <html>
 	<head>
 		<title>Error</title>
+
+		<%- include ("../parts/GoogleFonts.ejs") %>
+		<link rel="stylesheet" type="text/css" href="/css/global.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/header.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/error.css"/>
 	</head>
 	<body>
-		<h1>An error has occured</h1>
-		<h1><%= error %></h1>
+		<%- include ("../parts/header.ejs") %>
+		<p class="error-sign">
+			<strong>ERROR:</strong>
+		</p>
+		<p class="error-message"><%= error %></p>
 	</body>
 </html>

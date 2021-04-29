@@ -16,9 +16,9 @@ async function storeUser(name, email, password, done) {
 			password: hashed_password
 		});
 		register.save();
-		done(true, "success");
+		done(true, "");
 	} catch(err) {
-		done(false, "unexpected error");
+		done(false, "An unexpected error has occurred!");
 	}
 }
 
@@ -30,14 +30,14 @@ async function registerUser(req, res) {
 	try {
 		//check if password matches confirm password
 		if(req.body.password != req.body.confirmPassword) {
-			req.flash("error", "passwords do not match");
+			req.flash("error", "The passwords does not match!");
 			res.redirect("/register");
 			return;
 		}
 
 		//check if email is valid
 		if(!emailValidator.validate(email)) {
-			req.flash("error", "invalid email");
+			req.flash("error", "The email is not valid!");
 			res.redirect("/register");
 			return;
 		}
@@ -46,7 +46,7 @@ async function registerUser(req, res) {
 		const condensed_display_name = helper.titleFilter(name);
 		const existingName = await mongooseModels.users.findOne({ condensed_name: condensed_display_name });
 		if(existingName != null) {
-			req.flash("error", "the display name is already in use");
+			req.flash("error", "The display name is already in use!");
 			res.redirect("/register");
 			return;
 		}
@@ -54,14 +54,14 @@ async function registerUser(req, res) {
 		//check if the user already exist
 		const existingUser = await mongooseModels.users.findOne({ email: email });
 		if(existingUser != null) {
-			req.flash("error", "user already exist");
+			req.flash("error", "The email is already in use!");
 			res.redirect("/register");
 			return;
 		}
 
 		//store the user
-		storeUser(name, email, password, (error, result) => {
-			if(error) {
+		storeUser(name, email, password, (success, result) => {
+			if(success) {
 				res.redirect("/login");
 			} else {
 				req.flash("error", result);
@@ -69,7 +69,7 @@ async function registerUser(req, res) {
 			}
 		});
 	} catch(error) {
-		res.flash("error", "username already exist");
+		res.flash("error", "An unexpected error has occurred!");
 		res.redirect("/register");
 	}
 }
