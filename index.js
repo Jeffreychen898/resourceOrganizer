@@ -129,7 +129,7 @@ app.get("/manage", checkAuthenticated, async (req, res) => {
 
 app.get("*", (req, res) => {
 	res.render("pages/error.ejs", {
-		error: "404 Not Found!",
+		error: "404 Page Not Found!",
 		login: req.isAuthenticated()
 	});
 })
