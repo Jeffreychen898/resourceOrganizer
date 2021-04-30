@@ -13,6 +13,7 @@ const session = require("express-session");
 const csurf = require("csurf");
 const csrfProtection = csurf();
 const emailValidator = require("email-validator");
+const url = require("url");
 
 const helper = require("./src/helper");
 const initializePassport = require("./src/PassportConfig");
@@ -113,8 +114,12 @@ app.get("/register", checkNotAuthenticated, (req, res) => {
 });
 app.get("/manage", checkAuthenticated, async (req, res) => {
 	try {
+		const link = url.format({
+			protocol: req.protocol,
+			host: req.hostname
+		})
 		const result_list = await MongoModels.items.find({ user_id: req.user.id });
-		const search_url = "http://localhost:8080/search/" + req.user.condensed_name;
+		const search_url = link + "/search/" + req.user.condensed_name;
 		res.render("pages/manage.ejs", {
 			csrfToken: req.csrfToken(),
 			items: result_list,
