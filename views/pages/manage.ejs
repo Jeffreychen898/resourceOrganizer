@@ -1,33 +1,39 @@
 <!DOCTYPE html>
 <html>
 	<head>
-		<title>Append</title>
+		<title>Manage</title>
+		<meta id="csrf-token" content="<%= csrfToken %>"/>
+		<script src="/javascript/getcsrf.js"></script>
+		<%- include ("../parts/GoogleFonts.ejs") %>
+		<link rel="stylesheet" type="text/css" href="/css/global.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/header.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/manage.css"/>
 	</head>
 	<body>
-		<% for(let item of items) { %>
-
-		<div><%= item.title %> <button data-id="<%= item.id %>" onclick="removeItem(this)">Remove</button></div>
-		
-		<% } %>
+		<%- include ("../parts/header.ejs") %>
 		<% if(messages.error) { %>
-			<%= messages.error %>
+			<p class="error"><%= messages.error %></p>
 		<% } %>
-		<form action="/manage" method="POST">
-			<p>Title <input name="title" required/></p>
-			<p>url <input name="url" required/></p>
+		<input class="search-url" onclick="copyText(this)" value="<%= search_url %>" readonly/>
+		<div class="item-container">
+			<% for(let item of items) { %>
+				<div class="item" data-url="<%= item.url %>">
+					<a target="_blank" href="<%= item.url %>"><%= item.title %></a>
+					<button data-id="<%= item.id %>" onclick="removeItem(this)">Remove</button>
+				</div>
+			<% } %>
+		</div>
+		<form method="POST" action="/logout">
 			<input type="hidden" value="<%= csrfToken %>" name="_csrf"/>
-			<button type="submit">Submit</button>
+			<button type="submit" class="logout-button">Logout</button>
 		</form>
-		<script>
-			function removeItem(element) {
-				const xhr = new XMLHttpRequest();
-				xhr.onload = () => {
-					console.log(xhr);
-				}
-				xhr.open("POST", "/manage/remove", true);
-				xhr.setRequestHeader("Content-Type", "application/json");
-				xhr.send(JSON.stringify({_csrf: "<%= csrfToken %>", id: element.getAttribute("data-id")}));
-			}
-		</script>
+		<hr class="divider"/>
+		<form class="append-form" action="/manage" method="POST">
+			<input name="title" placeholder="Title" class="form-field form-content" required/>
+			<input name="url" placeholder="URL" class="form-field form-content" required/>
+			<input type="hidden" value="<%= csrfToken %>" name="_csrf"/>
+			<button type="submit" class="submit-button form-content">Add</button>
+		</form>
+		<script src="/javascript/manage.js"></script>
 	</body>
 </html>

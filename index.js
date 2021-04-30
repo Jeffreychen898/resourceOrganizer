@@ -33,6 +33,10 @@ function databaseConnected(result) {
 	});
 }
 
+//static
+app.use("/css", express.static("static/css"));
+app.use("/javascript", express.static("static/javascript"));
+
 //configs
 initializePassport(passport);
 
@@ -87,8 +91,7 @@ app.use(csurfErrorHandling);
 
 // get
 app.get("/", checkAuthenticated, (req, res) => {
-	//global search
-	res.send("Hello " + req.user.name);
+	res.redirect("/manage");
 });
 app.get("/account", checkAuthenticated, (req, res) => {
 	res.send("account " + req.user);
@@ -105,15 +108,14 @@ app.get("/register", checkNotAuthenticated, (req, res) => {
 		login: req.isAuthenticated()
 	});
 });
-app.get("/manage", checkAuthenticated, (req, res) => {
-	res.redirect("manage/1");
-});
-app.get("/manage/:page", checkAuthenticated, async (req, res) => {
+app.get("/manage", checkAuthenticated, async (req, res) => {
 	try {
 		const result_list = await MongoModels.items.find({ user_id: req.user.id });
+		const search_url = "http://localhost:8080/search/" + req.user.condensed_name;
 		res.render("pages/manage.ejs", {
 			csrfToken: req.csrfToken(),
 			items: result_list,
+			search_url: search_url,
 			login: req.isAuthenticated()
 		});
 	} catch(error) {
@@ -123,6 +125,13 @@ app.get("/manage/:page", checkAuthenticated, async (req, res) => {
 		});
 	}
 });
+
+app.get("*", (req, res) => {
+	res.render("pages/error.ejs", {
+		error: "404 Not Found!",
+		login: req.isAuthenticated()
+	});
+})
 
 // post
 app.post("/manage/remove", checkAuthenticated, async (req, res) => {
@@ -142,7 +151,7 @@ app.post("/manage", checkAuthenticated, (req, res, next) => {
 		next();
 	} else {
 		req.flash("error", "Required parameters must be filled!");
-		res.redirect("/manage/1");
+		res.redirect("/manage");
 	}
 }, async (req, res) => {
 	try {
@@ -157,11 +166,16 @@ app.post("/manage", checkAuthenticated, (req, res, next) => {
 		});
 		await insert.save();
 
-		res.redirect("/manage/1");
+		res.redirect("/manage");
 	} catch {
 		req.flash("error", "An unexpected error has occurred!");
-		res.redirect("/manage/1");
+		res.redirect("/manage");
 	}
+});
+
+app.post("/logout", checkAuthenticated, (req, res) => {
+	req.logOut();
+	res.redirect("/login");
 });
 
 app.post("/login", checkNotAuthenticated, (req, res, next) => {
@@ -215,6 +229,3 @@ function csurfErrorHandling(req, res, next) {
 		}
 	})
 }
-
-//static
-app.use("/css", express.static("static/css"));

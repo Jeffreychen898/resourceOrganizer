@@ -1,0 +1,124 @@
+.error {
+	color: red;
+	text-align: center;
+	margin: 10px 0;
+}
+
+.search-url {
+	margin: 10px auto;
+	width: 300px;
+	height: 30px;
+	padding: 0 15px;
+	outline: none;
+	cursor: pointer;
+	border: 2px solid #9F05CE;
+	border-radius: 10px;
+	display: block;
+	color: #9F05CE;
+}
+
+.item-container {
+	margin-top: 30px;
+}
+.item-container .item {
+	position: relative;
+	margin: 10px auto;
+	width: 70%;
+	height: 45px;
+	display: flex;
+	background-color: #F5F5F5;
+	border-radius: 10px;
+}
+.item-container * {
+	cursor: pointer;
+}
+.item-container .item:before {
+	content: attr(data-url);
+	position: absolute;
+	opacity: 0;
+	transform: translate(25px, 0);
+	transition: all 0.3s ease;
+	color: #9F05CE;
+}
+.item-container .item:hover:before {
+	transform: translate(25px, -125%);
+	opacity: 1;
+}
+.item-container .item a {
+	flex: 1;
+	line-height: 45px;
+	vertical-align: middle;
+	overflow: hidden;
+	text-overflow: ellipsis;
+	padding: 0 25px;
+	box-sizing: border-box;
+	color: #5A5A5A;
+	text-decoration: none;
+}
+.item-container .item button {
+	width: 100px;
+	height: 100%;
+	border-radius: 10px;
+	border: 2px solid red;
+	background-color: #FFFFFF00;
+	color: red;
+	transition: all 0.3s ease;
+}
+.item-container .item button:hover {
+	color: white;
+	background-color: red;
+}
+
+.divider {
+	border: none;
+	border-top: 2px solid grey;
+	width: 75%;
+	margin: auto;
+}
+
+.logout-button {
+	display: block;
+	margin: 10px auto;
+	width: 100px;
+	height: 30px;
+	border-radius: 15px;
+	border: 2px solid red;
+	background-color: #FFFFFF;
+	color: red;
+	transition: all 0.3s ease;
+}
+.logout-button:hover {
+	background-color: red;
+	color: white;
+}
+
+.append-form {
+	margin-top: 20px;
+}
+.append-form .form-content {
+	position: relative;
+	left: 50%;
+	transform: translateX(-50%);
+	margin: 5px 0;
+	border: 2px solid #9F05CE;
+	outline: none;
+	display: block;
+}
+.append-form .form-field {
+	width: 250px;
+	height: 30px;
+	padding: 0 15px;
+	border-radius: 10px;
+}
+.append-form .submit-button {
+	width: 100px;
+	height: 30px;
+	border-radius: 15px;
+	color: #9F05CE;
+	background-color: #FFFFFF;
+	transition: all 0.3s ease;
+}
+.append-form .submit-button:hover {
+	background-color: #9F05CE;
+	color: white;
+}
