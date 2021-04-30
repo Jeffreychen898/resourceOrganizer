@@ -9,7 +9,8 @@ async function searchItem(req, res) {
 		const result = await MongoModels.items.find({ user_id: find_user.id }).find({ filtered_title: { $regex: query }});
 		res.render("pages/search_result.ejs", {
 			user: req.params.user,
-			results: result
+			results: result,
+			login: req.isAuthenticated()
 		});
 
 	} catch(error) {

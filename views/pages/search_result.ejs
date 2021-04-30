@@ -2,19 +2,32 @@
 <html>
 	<head>
 		<title>Search</title>
+		<%- include ("../parts/GoogleFonts.ejs") %>
+		<link rel="stylesheet" type="text/css" href="/css/global.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/header.css"/>
+		<link rel="stylesheet" type="text/css" href="/css/search.css"/>
 	</head>
 	<body>
-		<form method="GET">
-			<input name="q"/>
-			<button>Submit</button>
+		<%- include ("../parts/header.ejs") %>
+		<form class="search-result-form" method="GET">
+			<h1 class="search-title title">Res/<%= user %></h1>
+			<div class="form-container">
+				<input class="search-bar" placeholder="Search . . ." name="q"/>
+				<button type="submit" class="form-submit">Search</button>
+			</div>
 		</form>
-		<h1><%= user %></h1>
-		<% if(results.length == 0) { %>
-			<h3>No results can be found</h3>
-		<% } else { %>
-			<% for(let item of results) { %>
-				<h1><%= item.title %></h1>
+		<div class="content-container">
+			<% if(results.length == 0) { %>
+				<h3>No results can be found</h3>
+			<% } else { %>
+				<% for(let item of results) { %>
+					<!--<h1><%= item.title %></h1>-->
+					<a class="item-container" href="<%= item.url %>">
+						<h1 class="item-title"><%= item.title %></h1>
+						<p class="item-url"><%= item.url %></p>
+					</a>
+				<% } %>
 			<% } %>
-		<% } %>
+		</div>
 	</body>
 </html>

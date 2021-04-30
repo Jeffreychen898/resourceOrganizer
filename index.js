@@ -82,6 +82,7 @@ app.get("/search/:user", async (req, res, next) => {
 	}
 
 	res.render("pages/search.ejs", {
+		user: req.params.user,
 		login: req.isAuthenticated()
 	});
 
